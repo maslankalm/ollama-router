@@ -1,0 +1,17 @@
+healthcheck_interval_seconds: 30
+healthcheck_timeout_seconds: 5
+request_timeout_seconds: 120
+
+backends:
+  - name: primary-local
+    priority: 10
+    endpoint: http://ollama-primary.example.internal:11434
+
+  - name: secondary-local
+    priority: 20
+    endpoint: http://ollama-secondary.example.internal:11434
+
+  - name: cloud-fallback
+    priority: 100
+    endpoint: https://ollama.com
+    api_key_env: OLLAMA_CLOUD_API_KEY
