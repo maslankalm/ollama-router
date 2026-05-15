@@ -19,6 +19,7 @@ class ChatCompletionRequest(BaseModel):
     temperature: float | None = None
     top_p: float | None = None
     max_tokens: int | None = Field(default=None, ge=1)
+    response_format: dict[str, Any] | None = None
 
 
 def to_ollama_payload(request: ChatCompletionRequest) -> dict[str, Any]:
@@ -36,6 +37,8 @@ def to_ollama_payload(request: ChatCompletionRequest) -> dict[str, Any]:
         options["top_p"] = request.top_p
     if request.max_tokens is not None:
         options["num_predict"] = request.max_tokens
+    if request.response_format and request.response_format.get("type") == "json_object":
+        payload["format"] = "json"
     if options:
         payload["options"] = options
     return payload

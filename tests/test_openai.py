@@ -21,6 +21,18 @@ def test_to_ollama_payload_maps_basic_chat():
     }
 
 
+def test_to_ollama_payload_maps_json_response_format():
+    request = ChatCompletionRequest.model_validate(
+        {
+            "model": "ministral-3:8b",
+            "messages": [{"role": "user", "content": "hello"}],
+            "response_format": {"type": "json_object"},
+        }
+    )
+    payload = to_ollama_payload(request)
+    assert payload["format"] == "json"
+
+
 def test_streaming_rejected_for_now():
     request = ChatCompletionRequest.model_validate(
         {"model": "m", "messages": [{"role": "user", "content": "hello"}], "stream": True}
